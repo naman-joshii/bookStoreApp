@@ -1,7 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import { Login } from './Login'
+import { useAuth } from '../context/AuthProvider'
+import Logout from './Logout'
 
 const Navbar = () => {
+
+    const [authUser, setAuthUser] = useAuth(); 
+    // console.log("local user ye hai: ", localStorage.getItem('Users'));
+
 
     const [sticky, setSticky] = useState(false)
     useEffect(()=>{
@@ -46,16 +52,19 @@ const Navbar = () => {
                 </ul>
             </div>
 
-            <div>
-               <div className='button'>
+           {
+            authUser ? <Logout /> : 
+                <div>
+                <div className='button'>
                     
                     <Login />
-               </div>
+                </div>
 
-               {/* <div>
+                {/* <div>
                     for dark theme
-               </div> */}
+                </div> */}
             </div>
+           }
         </nav>
     </div>
    </div>

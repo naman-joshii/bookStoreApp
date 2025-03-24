@@ -1,14 +1,20 @@
 import React from 'react'
 import books from './book.jpg'
+import { useAuth } from '../context/AuthProvider';
 
 const Banner = () => {
+
+    const [authUser, setAuthUser] = useAuth(); 
+    console.log(authUser)
+    // console.log("Name: ", authUser)
+
   return (
     <>
         <div className=' max-w-screen-2xl container mx-auto md:px-20 px-4 flex flex-col md:flex-row py-10 my-3'>
             <div className='order-2 md:order-1 w-full md:w-1/2 mt-12 md:mt-32'>
                 <div className='space-y-6'>
                     <h1 className='text-4xl font-bold'>
-                        Hello, welcome here to learn something <span className='text-pink-500'>new everyday!!!</span>
+                        Hello {authUser ? authUser.user.name : " "}, Welcome to learn something <span className='text-pink-500'>new everyday!!!</span>
                     </h1>
                     <p>
                         Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatibus asperiores laboriosam similique quos fugiat temporibus amet iure, repellat cupiditate quod rem tempora eaque, fuga at eum voluptas pariatur libero cum!
@@ -22,7 +28,7 @@ const Banner = () => {
 
                     </div>
                 </div>
-                <button className='mt-5 btn bg-pink-500 text-[18px]  text-white px-4 py-1 rounded-md'>Login</button>
+                <button className='mt-5 btn bg-pink-500 text-[18px]  text-white px-4 py-1 rounded-md'>Get Started</button>
             </div>
 
             <div className='order-1 w-full md:w-1/2'>

@@ -1,6 +1,9 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom"; 
 import {useForm} from 'react-hook-form';
+import axios from 'axios';
+import toast from "react-hot-toast";
 import {
   Card,
   Input,
@@ -12,10 +15,40 @@ import {
 } from "@material-tailwind/react";
 
 export function Signup() {
-  const [open, setOpen] = React.useState(false);
-  const handleOpen = () => setOpen((cur) => !cur);
+
+  const navigate  = useNavigate();
+
+  
+
+  // const [open, setOpen] = React.useState(false);
+  // const handleOpen = () => setOpen((cur) => !cur);
   const { register, handleSubmit, watch, formState: { errors } } = useForm();
-const onSubmit = data => console.log(data);
+
+  const location = useLocation();
+  const from = location.state?.from?.pathname || "/";
+
+  const onSubmit = async (data) => {
+    try {
+      const userInfo = {
+        name: data.name,
+        email: data.email,
+        password: data.password,
+      };
+  
+      const res = await axios.post("http://localhost:3000/user/signup", userInfo);
+      console.log(res.data);
+      if(res.data) {
+        toast.success("SIGNUP successfull cheeton")
+        navigate(from, { replace: true });
+        localStorage.setItem("Users", JSON.stringify(res.data))
+        window.location.reload();
+
+      }
+    } catch (err) {
+      console.error("Error:", err.response ? err.response.data : err.message);
+      toast.error("Error: " + (err.response ? err.response.data.message : err.message));
+    }
+  };
   return (
     <div className='flex h-screen justify-center items-center'>
        <Card className="mx-auto w-full max-w-[29rem] flex items-center justify-center p-6 " color="" shadow={true}>

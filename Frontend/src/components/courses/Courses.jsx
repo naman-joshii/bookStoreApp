@@ -2,10 +2,10 @@ import React from 'react'
 import Navbar from '../Navbar'
 import Course from '../Course'
 import Footer from '../Footer'
-import list from '../list.json'
+// import list from '../list.json'
 
 const Courses = () => {
-    console.log(list)
+    // console.log(list)
   return (
     <div>
       <Navbar />

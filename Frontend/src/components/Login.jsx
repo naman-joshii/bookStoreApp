@@ -1,84 +1,9 @@
-// import {
-//   Button,
-//   Dialog,
-//   Card,
-//   CardHeader,
-//   CardBody,
-//   CardFooter,
-//   Typography,
-//   Input,
-//   Checkbox,
-// } from "@material-tailwind/react";
-// import { Link } from "react-router-dom";
-// import {useForm} from 'react-hook-form';
-
-// export function Login() {
-//   const { register, handleSubmit, watch, formState: { errors } } = useForm();
-// const onSubmit = data => console.log(data);
-//   const [open, setOpen] = React.useState(false);
-//   const handleOpen = () => setOpen((cur) => !cur);
-
-//   return (
-//     <>
-//       <Button onClick={handleOpen}>Login</Button>
-//       <Dialog
-//         size="xs"
-//         open={open}
-//         handler={handleOpen}
-//         className="bg-transparent shadow-none"
-//       >
-//       <form onSubmit={handleSubmit(onSubmit)}>
-//         <Card className="mx-auto w-full max-w-[24rem]">
-//           <CardBody className="flex flex-col gap-4">
-//            
-//             {/* <Typography
-//               className="mb-3 font-normal"
-//               variant="paragraph"
-//               color="gray"
-//             >
-//               Enter your email and password to Sign In.
-//             </Typography> */}
-//             <Typography className="-mb-2" variant="h6">
-//                 Email:
-//             </Typography>
-//             
-//             <Typography className="-mb-2" variant="h6">
-//               Your Password:
-//             </Typography>
-//             
-//            
-
-//           </CardBody>
-//           <CardFooter className="pt-0">
-//             <Button  className="bg-pink-500"  fullWidth>
-//               Login
-//             </Button>
-//             <Typography variant="small" className="mt-4 flex justify-center">
-//               Cheetah 🐆, account bna le..
-//               <Link to="/signup">
-//                 <Typography
-//                     as="a"
-//                     // href="/signup"
-//                     variant="small"
-//                     color="blue-gray"
-//                     className="ml-1 font-bold underline text-blue-500"
-//                     onClick={handleOpen}
-//                 >
-//                     Sign up
-//                 </Typography>
-//               </Link>
-//             </Typography>
-//           </CardFooter>
-//         </Card>
-//       </form>
-//       </Dialog>
-//     </>
-//   );
-// }
 
 import React from "react";
+import axios from 'axios';
 import { Link } from "react-router-dom";
 import {useForm} from 'react-hook-form';
+import toast from "react-hot-toast";
 import {
   Card,
   Input,
@@ -93,7 +18,24 @@ export function Login() {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen((cur) => !cur);
   const { register, handleSubmit, watch, formState: { errors } } = useForm();
-const onSubmit = data => console.log(data);
+const onSubmit = async(data) => {
+  try {
+        const userInfo = {
+          email: data.email,
+          password: data.password,
+        };
+    
+        const res = await axios.post("http://localhost:3000/user/login", userInfo);
+        console.log(res.data);
+        localStorage.setItem("Users", JSON.stringify(res.data))
+        console.log("local storage",localStorage.getItem('Users'));
+        window.location.reload();
+        toast.success("login successfull cheeton")
+      } catch (err) {
+        console.error("Error:", err.response ? err.response.data : err.message);
+        toast.error("Error: " + (err.response ? err.response.data.message : err.message));
+      }
+}
 
   return (
     <>
@@ -108,7 +50,7 @@ const onSubmit = data => console.log(data);
         <Typography variant="h4" color="blue-gray">                 Login Now, <span className=" text-pink-500">Cheetey</span> 🐆
            </Typography>
           
-          <form onClick={handleSubmit(onSubmit)}  className="mt-8 mb-2 w-80 max-w-screen-lg sm:w-96">
+          <form onSubmit={handleSubmit(onSubmit)}  className="mt-8 mb-2 w-80 max-w-screen-lg sm:w-96">
             <div className="mb-1 flex flex-col gap-6">
              
               <Typography variant="h6" color="blue-gray" className="-mb-3">
@@ -126,7 +68,7 @@ const onSubmit = data => console.log(data);
             </div>
             
              
-            <Button className="mt-6 bg-pink-500" fullWidth>
+            <Button type="submit" className="mt-6 bg-pink-500" fullWidth>
               lOGIN
             </Button>
             <Typography color="gray" className="mt-4 text-center font-normal">
